@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import { useMemo } from "react";
 import Button from "../Button";
 import { FaCalendarCheck } from "react-icons/fa";
+import useEditModel from "@/hooks/useEditModal";
 
 interface UserBio {
   userId: string;
@@ -14,6 +15,8 @@ interface UserBio {
 const UserBio: React.FC<UserBio> = ({userId}) => {
   const { data: fetchedUser } = useUser(userId);
   const { data: currentUser } = useCurrentUser();
+
+  const editModel = useEditModel();
 
   const createdAt = useMemo(() => {
     if (!fetchedUser?.createdAt) {
@@ -27,7 +30,7 @@ const UserBio: React.FC<UserBio> = ({userId}) => {
     <div className="border-b-[3px] border-neutral-800 border-dashed pb-4 ">
       <div className="flex justify-end p-2">
         {currentUser?.id === userId ? (
-          <Button secondary label="Edit" onClick={() => {}} />
+          <Button secondary label="Edit" onClick={editModel.onOpen} />
         ) : (
           <Button
             onClick={() => {}}
@@ -48,7 +51,7 @@ const UserBio: React.FC<UserBio> = ({userId}) => {
         </div>
         <div className="flex flex-col mt-4">
           <p className="text-white">
-            {fetchedUser?.UserBio}
+            {fetchedUser?.bio}
           </p>
           <div className="
           flex
