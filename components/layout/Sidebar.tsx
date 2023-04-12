@@ -41,9 +41,9 @@ const Sidebar = () => {
               auth={item.auth}
             />
           ))}
-          {currentUser && (
+          {currentUser &&
             <SidebarItem onClick={() => signOut()} icon={RiLogoutCircleFill} label="Logout"/>
-          )}
+          }
 
           <SidebarEchoButton />
         </div>

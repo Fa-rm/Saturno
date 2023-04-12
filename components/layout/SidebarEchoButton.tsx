@@ -1,3 +1,4 @@
+import useCurrentUser from "@/hooks/useCurrentUser";
 import useLoginModal from "@/hooks/useLoginModal";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
@@ -6,10 +7,16 @@ import { FaSatelliteDish } from "react-icons/fa";
 const SidebarEchoButton = () => {
   const router = useRouter();
   const loginModal = useLoginModal();
+  const { data: currentUser } = useCurrentUser();
 
-  const onClick = useCallback(()=> {
-    loginModal.onOpen();
-  }, [loginModal]);
+  const onClick = useCallback(() => {
+    if (!currentUser) {
+      return loginModal.onOpen();
+    }
+
+    router.push('/');
+  }, [loginModal, router, currentUser]);
+
 
   return (
     <div onClick={onClick}>
