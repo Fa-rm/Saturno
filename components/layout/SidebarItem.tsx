@@ -13,27 +13,23 @@ interface SidebarItemProps {
 }
 
 
-const SidebarItem: React.FC<SidebarItemProps> = ({
-  label,
-  href,
-  icon: Icon,
-  onClick,
-  auth
-}) => {
-  const loginModal = useLoginModal();
-  const { data: currentUser }= useCurrentUser();
+const SidebarItem: React.FC<SidebarItemProps> = ({ label, icon: Icon, href, auth, onClick, }) => {
   const router = useRouter();
-  const handleClick = useCallback(() =>{
+  const loginModal = useLoginModal();
+
+  const { data: currentUser } = useCurrentUser();
+
+  const handleClick = useCallback(() => {
     if (onClick) {
       return onClick();
     }
+
     if (auth && !currentUser) {
       loginModal.onOpen();
-
     } else if (href) {
-    router.push(href);
+      router.push(href);
     }
-  }, [router, onClick, href, currentUser, auth, loginModal]);
+  }, [router, href, auth, loginModal, onClick, currentUser]);
   return (
     <div onClick={handleClick} className="flex flex-row items-center">
       <div
