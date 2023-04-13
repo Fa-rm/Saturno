@@ -24,15 +24,15 @@ const Button: React.FC<ButtonProps> = ({
     className={`
       disabled:opacity-70
       disabled:cursor-not-allowed
-      rounded-md
+      rounded-sm
       hover:rounded-xl
       font-semibold
       hover:opacity-80
       transition
       border-2
       ${fullWidth ? 'w-full' : 'w-fit'}
-      ${secondary ? 'bg-white' : 'bg-lime-500'}
-      ${secondary ? 'text-black' : 'text-white'}
+      ${secondary ? 'border-white' : 'bg-lime-500'}
+      ${secondary ? 'text-white' : 'text-white'}
       ${secondary ? 'border-black' : 'border-lime-500'}
       ${large ? 'text-md' : 'text-sm'}
       ${large ? 'px-5' : 'px-4'}
