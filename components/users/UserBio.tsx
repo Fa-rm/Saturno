@@ -1,22 +1,25 @@
-import Image from "next/image";
+
 import useUser from "@/hooks/useUser";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { format } from "date-fns";
 import { useMemo } from "react";
 import Button from "../Button";
 import { FaCalendarCheck } from "react-icons/fa";
-import useEditModel from "@/hooks/useEditModal";
 
-interface UserBio {
+import useFollow from "@/hooks/useFollow";
+import useEditModal from "@/hooks/useEditModal";
+
+interface UserBioProps {
   userId: string;
 }
 
-
-const UserBio: React.FC<UserBio> = ({userId}) => {
-  const { data: fetchedUser } = useUser(userId);
+const UserBio: React.FC<UserBioProps> = ({ userId }) => {
   const { data: currentUser } = useCurrentUser();
+  const { data: fetchedUser } = useUser(userId);
 
-  const editModel = useEditModel();
+  const editModal = useEditModal();
+
+  const { isFollowing, toggleFollow } = useFollow(userId);
 
   const createdAt = useMemo(() => {
     if (!fetchedUser?.createdAt) {
@@ -26,16 +29,18 @@ const UserBio: React.FC<UserBio> = ({userId}) => {
     return format(new Date(fetchedUser.createdAt), 'MMMM yyyy');
   }, [fetchedUser?.createdAt])
 
+
   return (
     <div className="border-b-[3px] border-neutral-800 border-dashed pb-4 ">
       <div className="flex justify-end p-2">
         {currentUser?.id === userId ? (
-          <Button secondary label="Edit" onClick={editModel.onOpen} />
+          <Button secondary label="Edit" onClick={editModal.onOpen} />
         ) : (
           <Button
-            onClick={() => {}}
-            label="Follow"
-            secondary
+            onClick={toggleFollow}
+            label={isFollowing ? 'Unfollow' : 'Follow'}
+            secondary={!isFollowing}
+            outline={isFollowing}
           />
         )}
       </div>
