@@ -1,4 +1,5 @@
-import { RiHomeFill, RiNotificationBadgeFill, RiAliensFill, RiLogoutCircleFill } from "react-icons/ri";
+import { RiHomeFill, RiAliensFill, RiLogoutCircleFill } from "react-icons/ri";
+import { AiFillAlert } from "react-icons/ai";
 import SidebarLogo from "./SidebarLogo";
 import SidebarItem from "./SidebarItem";
 import SidebarEchoButton from "./SidebarEchoButton";
@@ -16,8 +17,9 @@ const Sidebar = () => {
     {
       label: 'Notifications',
       href: '/notifications',
-      icon: RiNotificationBadgeFill,
-      auth: true
+      icon: AiFillAlert,
+      auth: true,
+      alert: currentUser?.hasNotification
     },
     {
       label: 'Profile',
@@ -39,6 +41,7 @@ const Sidebar = () => {
               label={item.label}
               icon={item.icon}
               auth={item.auth}
+              alert={item.alert}
             />
           ))}
           {currentUser &&
