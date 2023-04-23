@@ -1,45 +1,45 @@
-import useCurrentUser from "@/hooks/useCurrentUser";
-import useLoginModal from "@/hooks/useLoginModal";
-import usePosts from "@/hooks/usePosts";
-import { useRouter } from "next/router";
-import { useCallback, useMemo } from "react";
-import LoginModal from "../modals/LoginModal";
-import { formatDistanceToNowStrict } from "date-fns";
-import Avatar from "../Avatar";
+import { useRouter } from 'next/router';
+import { useCallback, useMemo } from 'react';
 import { RiMessage3Fill } from "react-icons/ri";
-import { HiLightningBolt } from "react-icons/hi";
+import { HiLightningBolt, HiOutlineLightningBolt } from "react-icons/hi";
+import { formatDistanceToNowStrict } from 'date-fns';
 
+import useLoginModal from '@/hooks/useLoginModal';
+import useCurrentUser from '@/hooks/useCurrentUser';
+import useLike from '@/hooks/useLike';
 
-
-
+import Avatar from '../Avatar';
 interface PostItemProps {
   data: Record<string, any>;
   userId?: string;
 }
 
-const PostItem: React.FC<PostItemProps> = ({ data, userId }) => {
+const PostItem: React.FC<PostItemProps> = ({ data = {}, userId }) => {
   const router = useRouter();
   const loginModal = useLoginModal();
-  const {data: currentUser} = useCurrentUser();
 
-  const goToUser = useCallback((event: any) => {
-    event.stopPropagation();
+  const { data: currentUser } = useCurrentUser();
+  const { hasLiked, toggleLike } = useLike({ postId: data.id, userId});
 
-    router.push(`/users/${data.user.id}`);
-
-
+  const goToUser = useCallback((ev: any) => {
+    ev.stopPropagation();
+    router.push(`/users/${data.user.id}`)
   }, [router, data.user.id]);
 
   const goToPost = useCallback(() => {
     router.push(`/posts/${data.id}`);
-
   }, [router, data.id]);
 
-  const onLike = useCallback((event: any) => {
-    event.stopPropagation();
+  const onLike = useCallback(async (ev: any) => {
+    ev.stopPropagation();
 
-    loginModal.onOpen();
-  },[loginModal]);
+    if (!currentUser) {
+      return loginModal.onOpen();
+    }
+
+    toggleLike();
+  }, [loginModal, currentUser, toggleLike]);
+
 
   const createdAt = useMemo(() => {
     if (!data?.createdAt) {
@@ -48,6 +48,8 @@ const PostItem: React.FC<PostItemProps> = ({ data, userId }) => {
 
     return formatDistanceToNowStrict(new Date(data.createdAt));
   }, [data.createdAt])
+
+  const LikeIcon = hasLiked ? HiLightningBolt : HiOutlineLightningBolt;
 
   return (
     <div
@@ -121,9 +123,9 @@ const PostItem: React.FC<PostItemProps> = ({ data, userId }) => {
                 transition
                 hover:text-yellow-500
             ">
-              <HiLightningBolt size={20} />
+              <LikeIcon size={20} color={hasLiked ? 'yellow' : '' }/>
               <p>
-                {data.comments?.length}
+                {data.likedIds.length || 0}
               </p>
             </div>
           </div>
