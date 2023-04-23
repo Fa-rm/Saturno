@@ -9,7 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    
+
     const { postId } = req.body;
 
     const { currentUser } = await serverAuth(req, res);
@@ -33,7 +33,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (req.method === 'POST') {
       updatedLikedIds.push(currentUser.id);
 
-      // NOTIFICATION PART START
       try {
         const post = await prisma.post.findUnique({
           where: {
@@ -44,7 +43,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if (post?.userId) {
           await prisma.notification.create({
             data: {
-              body: 'Someone liked your tweet!',
+              body: 'Someone liked your Echo!',
               userId: post.userId
             }
           });
@@ -62,7 +61,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         console.log(error);
       }
-      // NOTIFICATION PART END
     }
 
     if (req.method === 'DELETE') {

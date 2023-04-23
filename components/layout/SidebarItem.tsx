@@ -3,17 +3,18 @@ import useLoginModal from "@/hooks/useLoginModal";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
 import { IconType } from "react-icons";
+import { BsDot } from 'react-icons/bs';
 
 interface SidebarItemProps {
   label: string;
+  icon: IconType;
   href?: string;
-  icon: IconType
   onClick?: () => void;
-  auth?:boolean;
+  auth?: boolean;
+  alert?: boolean;
 }
 
-
-const SidebarItem: React.FC<SidebarItemProps> = ({ label, icon: Icon, href, auth, onClick, }) => {
+const SidebarItem: React.FC<SidebarItemProps> = ({ label, icon: Icon, href, auth, onClick, alert }) => {
   const router = useRouter();
   const loginModal = useLoginModal();
 
@@ -30,6 +31,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ label, icon: Icon, href, auth
       router.push(href);
     }
   }, [router, href, auth, loginModal, onClick, currentUser]);
+
   return (
     <div onClick={handleClick} className="flex flex-row items-center">
       <div
@@ -48,7 +50,8 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ label, icon: Icon, href, auth
           lg:hidden
         "
       >
-        <Icon size={15} color="white"/>
+        <Icon size={20} color="white"/>
+        {alert ? <BsDot className="text-lime-500 absolute -top-4 left-0" size={75} /> : null}
       </div>
       <div
       className="
@@ -64,10 +67,11 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ label, icon: Icon, href, auth
       cursor-pointer
       "
       >
-        <Icon size={18} color="white"/>
+        <Icon size={25} color="white"/>
         <p className="hidden lg:block text-white text-sm">
           {label}
         </p>
+        {alert ? <BsDot className="text-lime-500 absolute -top-4 left-0" size={75} /> : null}
 
       </div>
     </div>
