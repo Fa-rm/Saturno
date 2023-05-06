@@ -28,20 +28,22 @@ const Modal: React.FC<ModalProps> = ({
       return;
     }
 
-    onClose();
+    if (onClose) {
+      onClose();
+    }
   }, [disabled, onClose]);
+
 
   const handleSubmit = useCallback(() => {
     if (disabled) {
       return;
     }
 
-    onSubmit();
+    if (onSubmit) {
+      onSubmit();
+    }
   }, [disabled, onSubmit]);
 
-  if (!isOpen) {
-    return null;
-  }
 
   return (
     <>
@@ -123,8 +125,8 @@ const Modal: React.FC<ModalProps> = ({
             <div className="flex flex-col gap-2 p-10">
               <Button
                 disabled={disabled}
-                label={actionLabel}
-                secundary
+                label={actionLabel  || ''}
+                secondary
                 fullWidth
                 large
                 onClick={handleSubmit}
